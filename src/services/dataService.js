@@ -49,7 +49,13 @@ class DataService {
     return catalog;
     }
 
-    
+    saveProduct(prod) {
+        console.log("Sending prod to server..... NOT");
+    }
+
+    saveCoupon(code) {
+        console.log("Sending CC to server.....NOT");
+    }
 }
 
 export default DataService;
