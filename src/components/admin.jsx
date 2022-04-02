@@ -4,17 +4,20 @@ import DataService from "../services/dataService";
 
 
 const Admin = () => {
+
     const [prod, setProd] = useState({});
     const [coupon, setCoupon] = useState({});
-
+//create all coupons
+    const [allCoupons, setAllCoupons] = useState([]);
+    const [allProds, setAllProds] = useState([]);
     const handleInputChange = (e) => {
-    var copy = {...prod};
+    var copy = { ...prod };
     copy[e.target.name] = e.target.value;
     setProd(copy);
 }; 
 //building the object
     const handleCCChange = (e) => {
-        var copy = {...coupon};
+        var copy = { ...coupon  };
         copy[e.target.name] = e.target.value;
         setCoupon(copy);
     };
@@ -25,12 +28,23 @@ const saveProduct = () => {
     let service = new DataService();
     service.saveProduct(prod);
 
+    let copy = [...allProds];
+    copy.push(prod);
+    setAllProds(copy);
+
 };
 
 const saveCoupon = () => {
     console.log(coupon);
-};
+    let service = new DataService();
+    service.saveCoupon(coupon);
 
+//add it to all coupons
+//NEVER EVER =>allCoupons.push(coupon);
+let copy = [...allCoupons];
+copy.push(coupon);
+setAllCoupons(copy);
+};
     return (
         <div className="admin">
             <h1>Store administration</h1>
@@ -63,13 +77,14 @@ const saveCoupon = () => {
                         Save Product
                     </button>
                 </div>
-
+                {/*title.-.$price.*/}
+                {allProds.map( (prod, index) => (<div> {prod.title} - ${prod.price} </div>) )}
             </section>
             <section>
                 <h3>Coupon Codes</h3>
                 <div className="my-control">
                     <label>Code:</label>
-                    <input onClick={handleCCChange} name="code" type="text" ></input>
+                    <input onChange={handleCCChange} name="code" type="text" ></input>
                 </div>
 
                 <div className="my-control">
@@ -78,8 +93,13 @@ const saveCoupon = () => {
                 </div>
 
                 <div className="my-control">
-                    <button onChange={saveCoupon} className="btn btn-dark">Save Coupon Code</button>
+                    <button onClick={saveCoupon} className="btn btn-dark">Save Coupon Code</button>
                 </div>
+
+                <div className="coupon-list">
+                    {allCoupons.map((coupon, index) => ( <div key={index}> <label>{coupon.code}</label> - <label>{coupon.discount}</label></div> ))}
+                </div>
+                
             </section>
 
         </div>
