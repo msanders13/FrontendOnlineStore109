@@ -7,16 +7,16 @@ const Catalog = () => {
 
     let [products, selProducts] = useState([]);
 
-    const loadCatalog = () => {
+    const loadCatalog = async () => {
         console.log("Data retrieved");
         let service = new DataService();
-        let data = service.getCatalog();
+        let data = await service.getCatalog();
         selProducts(data);
     };
 
     useEffect( () => {
         loadCatalog();
-    } );
+    }, []);
 
 
     return (<div className="catalog">
